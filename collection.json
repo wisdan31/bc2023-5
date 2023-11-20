@@ -31,14 +31,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8000/notes/UploadForm.html",
+					"raw": "http://localhost:8000/UploadForm.html",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8000",
 					"path": [
-						"notes",
 						"UploadForm.html"
 					]
 				}
@@ -55,12 +54,12 @@
 					"formdata": [
 						{
 							"key": "note_name",
-							"value": "postman note name",
+							"value": "new test name",
 							"type": "text"
 						},
 						{
 							"key": "note",
-							"value": "postman note body",
+							"value": "some text for test",
 							"type": "text"
 						}
 					]
@@ -85,7 +84,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8000/notes/test",
+					"raw": "http://localhost:8000/notes/new test name",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -93,7 +92,7 @@
 					"port": "8000",
 					"path": [
 						"notes",
-						"test"
+						"new test name"
 					]
 				}
 			},
@@ -106,10 +105,10 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "body was changed with postman!"
+					"raw": "body was changed with postman! again..."
 				},
 				"url": {
-					"raw": "http://localhost:8000/notes/test 2",
+					"raw": "http://localhost:8000/notes/new test name",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -117,7 +116,7 @@
 					"port": "8000",
 					"path": [
 						"notes",
-						"test 2"
+						"new test name"
 					]
 				}
 			},
@@ -129,7 +128,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8000/notes/johan",
+					"raw": "http://localhost:8000/notes/postman note name",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -137,7 +136,7 @@
 					"port": "8000",
 					"path": [
 						"notes",
-						"johan"
+						"postman note name"
 					]
 				}
 			},
