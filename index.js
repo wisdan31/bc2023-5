@@ -10,6 +10,10 @@ app.use(express.json());
 app.use(upload.any());
 app.use(express.text());
 
+function noteExist(noteName, array){
+    return array.some(obj => obj["title"] == noteName)
+}
+
 app.listen(port, () => {
     console.log("Server is running on http://localhost:" + port);
 })
@@ -23,12 +27,12 @@ app.post("/upload", (req, res) => {
     let noteBody = req.body.note;
     let notes = JSON.parse(fs.readFileSync("notes.json"));
 
-    if (noteTitle in notes) {
-        return res.status(400).send("Bad Request: note already exists");
+    if (noteExist(noteTitle, notes)){
+        return res.status(404).send("Bad request: note already exists.")
     }
-    notes[noteTitle] = noteBody;
-    const updatedNotes = JSON.stringify(notes);
-
+    
+    notes.push({"title": noteTitle, "body": noteBody});
+    let updatedNotes = JSON.stringify(notes);
     fs.writeFileSync("notes.json", updatedNotes);
 
     return res.status(201).send("Note was succesfully created");
@@ -38,22 +42,25 @@ app.get("/notes/:title", (req, res) => {
     let notes = JSON.parse(fs.readFileSync("notes.json"));
     let noteTitle = req.params.title;
 
-    if (!(noteTitle in notes)){
+    if (!noteExist(noteTitle, notes)){
         return res.status(404).send("Not found: such note doesn't exist.")
     }
-
-    return res.status(200).send(notes[noteTitle]);
+    
+    const note = notes.find(obj => obj["title"] == noteTitle);
+    return res.status(200).send(note["body"]);
 })
 
 app.put("/notes/:title", (req, res) => {
     let notes = JSON.parse(fs.readFileSync("notes.json"));
     let noteTitle = req.params.title;
+    let newNoteBody = req.body;
 
-    if (!(noteTitle in notes)){
+    if (!noteExist(noteTitle, notes)){
         return res.status(404).send("Not found: such note doesn't exist.")
     }
 
-    notes[noteTitle] = req.body;
+    const note = notes.find(obj => obj["title"] == noteTitle);
+    note["body"] = newNoteBody;
     updatedNotes = JSON.stringify(notes);
     fs.writeFileSync("notes.json", updatedNotes);
     return res.status(200).send("Success: your note was changed.");
@@ -63,11 +70,12 @@ app.delete("/notes/:title", (req, res) => {
     let notes = JSON.parse(fs.readFileSync("notes.json"));
     let noteTitle = req.params.title;
 
-    if (!(noteTitle in notes)){
+    if (!noteExist(noteTitle, notes)){
         return res.status(404).send("Not found: such note doesn't exist.")
     }
-    delete notes[noteTitle];
-    updatedNotes = JSON.stringify(notes);
+
+    let note = notes.find(obj => obj["title"] == noteTitle);
+    let updatedNotes = JSON.stringify(notes.filter(obj => obj["title"] != note["title"]));
     fs.writeFileSync("notes.json", updatedNotes);
 
     return res.status(200).send("Success: your note was deleted");  
