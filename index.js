@@ -19,6 +19,9 @@ app.listen(port, () => {
 })
 
 app.get("/notes", (req, res) => {
+    if (!fs.existsSync("notes.json")){
+        fs.writeFileSync("notes.json", "[]");
+    }
     res.sendFile("notes.json", {root: __dirname});
 })
 
@@ -60,13 +63,17 @@ app.put("/notes/:title", (req, res) => {
     }
 
     const note = notes.find(obj => obj["title"] == noteTitle);
+    console.log(note)
+    console.log(notes)
     note["body"] = newNoteBody;
+    console.log(note)
+    console.log(notes)
     updatedNotes = JSON.stringify(notes);
     fs.writeFileSync("notes.json", updatedNotes);
     return res.status(200).send("Success: your note was changed.");
 })
 
-app.delete("/notes/:title", (req, res) => {
+app.delete("/notes/:title", (req, res) => { 
     let notes = JSON.parse(fs.readFileSync("notes.json"));
     let noteTitle = req.params.title;
 
