@@ -31,7 +31,7 @@ app.post("/upload", (req, res) => {
     let notes = JSON.parse(fs.readFileSync("notes.json"));
 
     if (noteExist(noteTitle, notes)){
-        return res.status(404).send("Bad request: note already exists.")
+        return res.status(400).send("Bad request: note already exists.")
     }
     
     notes.push({"title": noteTitle, "body": noteBody});
